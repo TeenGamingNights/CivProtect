@@ -14,14 +14,36 @@ targetCompatibility = '1.8'
 repositories {
     mavenCentral()
     maven {
+        url = 'https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/'
+    }
+    maven {
         name = 'papermc-repo'
         url = 'https://papermc.io/repo/repository/maven-public/'
     }
+    maven {
+        url = "https://repo.codemc.org/repository/maven-public/"
+    }
+    maven { url = "https://repo.aikar.co/content/groups/aikar/" }
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compileOnly "org.bukkit:bukkit:$mcVersion-R0.1-SNAPSHOT"
+    compile group: 'net.devtech', name: 'yajslib', version: '1.0'
+    compile group: 'net.devtech', name: 'dev-lib', version: '1.1'
+    compileOnly "de.tr7zw:item-nbt-plugin:2.2.0"
+    // https://mvnrepository.com/artifact/org.jetbrains/annotations
+    compile group: 'org.jetbrains', name: 'annotations', version: '19.0.0'
+    // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
+    compile group: 'it.unimi.dsi', name: 'fastutil', version: '8.3.1'
+    // command api
+    compile "co.aikar:acf-bukkit:0.5.0-SNAPSHOT"
+}
+
+compileJava {
+    options.compilerArgs += ["-parameters"]
+    options.fork = true
+    options.forkOptions.executable = 'javac'
 }
 
 shadowJar {
@@ -33,7 +55,7 @@ task validateMain {
     char sep = File.separatorChar
     sourceSets.main.java.srcDirs.forEach {
         File file = new File(it, "${pluginGroup.replace('.' as char, sep)}$sep${pluginName.toLowerCase()}$sep${pluginName}.java")
-        if(!file.exists())
+        if (!file.exists())
             throw new IllegalArgumentException("Update your gradle.properties! main class must be pluginGroup.pluginname.PluginName!")
     }
 }
